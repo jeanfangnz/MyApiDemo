@@ -1,0 +1,28 @@
+# Build results
+bin/
+obj/
+# Rider / Visual Studio / VS Code
+.vs/
+.idea/
+.vscode/
+# User-specific files
+*.user
+*.userosscache
+*.suo
+# macOS
+.DS_Store
+# Logs
+*.log
+# Local development overrides
+appsettings.Development.json
+appsettings.Local.json
+# Environment variables
+.env
+.env.*
+# Test results / coverage
+TestResults/
+coverage/
+coverage.*
+# Backup files
+*~
+*.swp
