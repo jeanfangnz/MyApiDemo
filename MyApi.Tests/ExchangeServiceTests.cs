@@ -7,10 +7,10 @@ public class ExchangeServiceTests
     [Fact]
     public async Task ConvertAsync_ReturnsRoundedValue_FromRoundingService()
     {
-        // Arrange
+        // Mock a fake rate provider
         var rateProvider = new FakeRateProvider(rate: 2.0m);
 
-        // 假设 amount * rate = 10 * 2 = 20，但 rounding 最终返回 19.99（为了验证 rounding 被调用）
+        // Provide a different value than 20.00m to make sure round provder has been called
         var roundingProvider = new FakeRoundingProvider(roundedValue: 19.99m);
 
         var svc = new ExchangeService(roundingProvider, rateProvider);
@@ -22,10 +22,8 @@ public class ExchangeServiceTests
             OutputCurrency = "EUR"
         };
 
-        // Act
         var result = await svc.ConvertAsync(req);
 
-        // Assert
         Assert.Equal(19.99m, result);
         Assert.Equal(1, rateProvider.Calls);
         Assert.Equal(1, roundingProvider.Calls);
@@ -34,7 +32,7 @@ public class ExchangeServiceTests
     [Fact]
     public async Task ConvertAsync_ThrowsBusinessException_WhenSameCurrency()
     {
-        // Arrange
+        // Call Exchange service with mock providers
         var svc = new ExchangeService(new FakeRoundingProvider(1.0m), new FakeRateProvider(1.0m));
 
         var req = new ExchangeRequest
@@ -44,7 +42,6 @@ public class ExchangeServiceTests
             OutputCurrency = "USD"
         };
 
-        // Act + Assert
         var ex = await Assert.ThrowsAsync<BusinessException>(() => svc.ConvertAsync(req));
         Assert.Contains("InputCurrency and OutputCurrency must be different.", ex.Message);
     }

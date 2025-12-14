@@ -10,6 +10,7 @@ public interface IExchangeRequest
 
 public class ExchangeRequest : IExchangeRequest
 {
+    // Small positive lower bound to avoid zero/negative amounts.
     [Range(0.0000001, double.MaxValue, ErrorMessage = "Amount must be greater than 0")]
     public decimal Amount { get; set; }
 
